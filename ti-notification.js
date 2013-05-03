@@ -1,14 +1,20 @@
 /**
  * ti-notification
  * 
- * This module layers a notification view on top your window.
+ * Copy this file into your resources and require it like this:
+ * var notification = require('ti-notification');
+ * 
+ * To show a notification, you just call:
+ * notification.show('Hello World!');
+ * 
+ * For more infomation, visit https://github.com/manumaticx/ti-notifications
  * 
  * @author Manuel Lehner (manumaticx@gmail.com)
  */
 
 var os = Ti.Platform.osname;
 
-// basic initalisation values	
+// basic initalization values	
 var Notification = {
 	duration: 3000,
 	navbar: true,
@@ -25,11 +31,11 @@ var colors = {
 	white: 'white',
 	black: 'black',
 	transparent: 'transparent'
-}
+};
 
 // type definitions
-// you can add custom properties here, e.g. icons
-var type = {
+// add custom properties here, e.g. icons
+Notification.type = {
 	ALERT: {
 		color: colors.red
 	},
@@ -39,19 +45,19 @@ var type = {
 	INFO: {
 		color: colors.blue
 	}
-}
+};
 
 /**
  * shows the notification
- * the navbar param is optional, you should only use it to show notifications on windows without Navigationbar
- * (unfortunatly the module don't know from what kind of window you call it)
+ * type and navbar is optional
+ * you should use navbar only to show notifications on windows without Navigationbar
+ * (unfortunatly the module doesn't know from what kind of window you call it)
  * 
- * @param {Notification.type} type
  * @param {String} message
- * @param {Boolean} navbar
+ * @param {Notification.type} type - optional (default: ALERT)
+ * @param {Boolean} navbar - optional (default: true)
  */
-var show = function(type, message, navbar){
-	
+var show = function(message, type, navbar){
 	if (Notification.showing){
 		Notification.queue.push({
 			type: type,
@@ -62,11 +68,11 @@ var show = function(type, message, navbar){
 	}else{
 		Notification.orientation = Ti.Gesture.getOrientation();
 		Notification.showing = true;
-		if (navbar != undefined) Notification.navbar = navbar;
-		else Notification.navbar = true;
+		var _type = type || Notification.type.ALERT;
+		Notification.navbar = navbar || true;
 		init(function(){
 			Notification.view.setTop((os === 'android') ? '-60dp' : -60);
-			Notification.background.backgroundColor = type.color;
+			Notification.background.backgroundColor = _type.color;
 			Notification.message.setText(message);
 			Notification.win.open();
 		});
@@ -74,8 +80,7 @@ var show = function(type, message, navbar){
 			hide();
 		},Notification.duration);		
 	}
-
-}
+};
 
 /**
  * called to hide showing notification
@@ -83,7 +88,7 @@ var show = function(type, message, navbar){
 var hide = function(){
 	Notification.view.animate(up);
 	Notification.navbar = true;
-}
+};
 
 /**
  * initialisation of the notification 
@@ -91,30 +96,30 @@ var hide = function(){
  */
 var init = function(_callback){
 	
-	var navbarHeight;
+	var _navbarHeight;
 	switch (os){
 		case 'iphone':
-			navbarHeight = (
+			_navbarHeight = (
 				Notification.orientation === Titanium.UI.LANDSCAPE_LEFT || 
 				Notification.orientation === Titanium.UI.LANDSCAPE_RIGHT
 			) ? 31 : 43 ;
 			break;
 		case 'ipad':
-			navbarHeight = 43;
+			_navbarHeight = 43;
 			break;
 		case 'mobileweb':
-			navbarHeight = 50;
+			_navbarHeight = 50;
 			break;
 		case 'android':
 			// this value should be the height of the ActionBar / TabBar
-			navbarHeight = 0;
+			_navbarHeight = 0;
 			break;
 		default:
-			navbarHeight = 0;
-	}
+			_navbarHeight = 0;
+	};
 	
 	Notification.win = Titanium.UI.createWindow({
-		top: Notification.navbar ? navbarHeight : 0,
+		top: Notification.navbar ? _navbarHeight : 0,
 		width: Ti.UI.FILL,
 		height: (os === 'android') ? '52dp' : 52
 	});
@@ -187,10 +192,12 @@ var up = Ti.UI.createAnimation({
     duration: 300
 });
 
+// calles when notification is done
 up.addEventListener('complete', function(){
-	Notification.win.close();
+	if (Notification.win != null) Notification.win.close();
 	Notification.win = null;
 	Notification.showing = false;
+	// if there are other notifications in the queue, show the next 
 	if (Notification.queue.length > 0){
 		var _next = Notification.queue[0];
 		exports.show(_next.type, _next.message, _next.navbar);
@@ -199,7 +206,7 @@ up.addEventListener('complete', function(){
 });
 
 // Interface
-exports.type = type; 
+exports.type = Notification.type; 
 exports.show = show;
 exports.hide = hide;
 

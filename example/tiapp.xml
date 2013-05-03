@@ -2,10 +2,10 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>de.manumaticx.tinotifications</id>
     <name>ti-notifications</name>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <publisher>manumaticx</publisher>
     <url>https://github.com/manumaticx</url>
-    <description>not specified</description>
+    <description>In-App Notifications for Titanium Mobile Applications </description>
     <copyright>2013 by manumaticx</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
@@ -14,7 +14,7 @@
     <statusbar-hidden>false</statusbar-hidden>
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
-    <analytics>true</analytics>
+    <analytics>false</analytics>
     <guid>0569622f-bb6d-4465-ab4f-3ae013ebe785</guid>
     <property name="ti.ui.defaultunit" type="string">system</property>
     <iphone>
@@ -48,5 +48,5 @@
         <target device="iphone">true</target>
         <target device="mobileweb">true</target>
     </deployment-targets>
-    <sdk-version>3.0.2.GA</sdk-version>
+    <sdk-version>3.1.0.GA</sdk-version>
 </ti:app>
