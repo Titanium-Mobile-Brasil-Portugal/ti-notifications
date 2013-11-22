@@ -6,7 +6,22 @@
  * @author Manuel Lehner (manumaticx@gmail.com)
  */
 
-var os = Ti.Platform.osname;
+var os = Ti.Platform.osname,
+    ios7 = (function(){
+		// iOS-specific test
+		if (Titanium.Platform.name == 'iPhone OS')
+		{
+		var version = Titanium.Platform.version.split(".");
+		var major = parseInt(version[0],10);
+		
+		// Can only test this support on a 3.2+ device
+		if (major >= 7)
+		{
+		    return true;
+		}
+		}
+		return false;    	       
+    	    })();
 
 // basic initalisation values	
 var Notification = {
@@ -65,7 +80,7 @@ var show = function(type, message, navbar){
 		if (navbar != undefined) Notification.navbar = navbar;
 		else Notification.navbar = true;
 		init(function(){
-			Notification.view.setTop((os === 'android') ? '-60dp' : -60);
+			Notification.view.setTop((os === 'android') ? '-60dp' : (ios7 ? -80 : -60));
 			Notification.background.backgroundColor = type.color;
 			Notification.message.setText(message);
 			Notification.win.open();
@@ -112,6 +127,8 @@ var init = function(_callback){
 		default:
 			navbarHeight = 0;
 	}
+	
+	ios7 && (navbarHeight += 20);
 	
 	Notification.win = Titanium.UI.createWindow({
 		top: Notification.navbar ? navbarHeight : 0,
