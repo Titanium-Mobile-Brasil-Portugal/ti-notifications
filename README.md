@@ -1,5 +1,10 @@
 # ti-notification
 
+> NO LONGER MAINTAINED
+
+> NOTE:
+> I've stopped improving this module. It might still work on iOS but since lightweight windows were dropped from Titanium Mobile it probably won't work on Android anymore. 
+
 An alternative to Alerts or AlertDialogs to show messages for user feedback in Titanium Mobile Applications (inspired by [Crouton](https://github.com/keyboardsurfer/Crouton) for Android).
 
 This is a CommonJS module for Classic Titanium and it works with iOS, Android and Mobile web.
@@ -11,9 +16,9 @@ If you are using Alloy, you may want to checkout my [Toasty](https://github.com/
 
 ```javascript
 var notification = require('ti-notification');
-	
+
 notification.show('An error occured.');
-	
+
 // using a type
 notification.show('Registration was successful!', notification.type.CONFIRM);
 ```
