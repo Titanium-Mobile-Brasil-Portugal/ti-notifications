@@ -10,18 +10,10 @@
 
 var notification = require('lib/ti-notification');
 
-Titanium.UI.setBackgroundColor('#000');
-
-var tabGroup = Titanium.UI.createTabGroup();
-
 var win = Titanium.UI.createWindow({
-	title: 'ti-notification',
-    backgroundColor:'#fff',
-    tabBarHidden: true,
-    layout: 'vertical'
+    layout: 'vertical',
+    backgroundColor: '#fff'
 });
-
-tabGroup.addTab(Titanium.UI.createTab({ window:win }));
 
 var types = [notification.type.ALERT, notification.type.CONFIRM, notification.type.INFO];
 
@@ -40,4 +32,4 @@ function button(title, message, type){
 	return self;
 };
 
-tabGroup.open();
+win.open();
